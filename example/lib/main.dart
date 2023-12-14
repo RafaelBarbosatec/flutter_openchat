@@ -61,9 +61,9 @@ class _MyHomePageState extends State<MyHomePage> {
       body: FlutterOpenChatWidget(
         llm: OpenChatTeamLLMProvider(),
         assetBootAvatar:
-            'https://api.dicebear.com/7.x/bottts-neutral/png?seed=100&radius=50',
+            'https://api.dicebear.com/7.x/bottts-neutral/png?seed=Harley&radius=50',
         assetUserAvatar:
-            'https://api.dicebear.com/7.x/avataaars-neutral/png?seed=100&radius=50',
+            'https://api.dicebear.com/7.x/avataaars-neutral/png?seed=Jack&radius=50',
         backgroundEmpty: const Center(
           child: Text('Hothing over here'),
         ),
