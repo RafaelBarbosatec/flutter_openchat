@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_openchat/flutter_openchat.dart';
 
+ThemeType _themeType = ThemeType();
 void main() {
   runApp(const MyApp());
 }
@@ -13,15 +12,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
-        ),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(),
+    return ListenableBuilder(
+      listenable: _themeType,
+      builder: (context, child) {
+        return MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+                seedColor: Colors.blue, brightness: _themeType.brightness),
+            useMaterial3: true,
+          ),
+          home: const MyHomePage(),
+        );
+      },
     );
   }
 }
@@ -40,17 +43,47 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('OpenChat example'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              if (_themeType.brightness == Brightness.dark) {
+                _themeType.setLight();
+              } else {
+                _themeType.setDark();
+              }
+            },
+            icon: Icon(
+              _themeType.isLight ? Icons.nightlight : Icons.sunny,
+            ),
+          )
+        ],
       ),
       body: FlutterOpenChatWidget(
         llm: OpenChatTeamLLMProvider(),
         assetBootAvatar:
-            'https://api.dicebear.com/7.x/bottts-neutral/png?seed=${Random().nextInt(1000)}&radius=50',
+            'https://api.dicebear.com/7.x/bottts-neutral/png?seed=100&radius=50',
         assetUserAvatar:
-            'https://api.dicebear.com/7.x/avataaars-neutral/png?seed=${Random().nextInt(1000)}&radius=50',
+            'https://api.dicebear.com/7.x/avataaars-neutral/png?seed=100&radius=50',
         backgroundEmpty: const Center(
           child: Text('Hothing over here'),
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+}
+
+class ThemeType extends ChangeNotifier {
+  Brightness brightness = Brightness.light;
+
+  bool get isLight => brightness == Brightness.light;
+
+  void setLight() {
+    brightness = Brightness.light;
+    notifyListeners();
+  }
+
+  void setDark() {
+    brightness = Brightness.dark;
+    notifyListeners();
   }
 }
