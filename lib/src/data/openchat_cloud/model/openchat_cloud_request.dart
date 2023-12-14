@@ -2,7 +2,6 @@
 import 'dart:convert';
 
 class OpenChatCloudRequest {
-
   final String content;
 
   OpenChatCloudRequest({required this.content});
@@ -14,8 +13,6 @@ class OpenChatCloudRequest {
       'content': content,
     };
   }
-
-
 
   String toJson() => json.encode(toMap());
 }
