@@ -1,28 +1,30 @@
 import 'dart:convert';
 
+enum ChateMessageRole { user, assistant }
+
 class ChatMessage {
-  String role;
+  ChateMessageRole role;
   String content;
 
   ChatMessage({required this.role, required this.content});
 
   factory ChatMessage.user(String content) {
     return ChatMessage(
-      role: 'user',
+      role: ChateMessageRole.user,
       content: content,
     );
   }
 
   factory ChatMessage.assistant(String content) {
     return ChatMessage(
-      role: 'assistant',
+      role: ChateMessageRole.assistant,
       content: content,
     );
   }
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['role'] = role;
+    data['role'] = role.name;
     data['content'] = content;
     return data;
   }
@@ -65,8 +67,11 @@ class OpenChatTeamRequest {
   List<ChatMessage> messages;
   double temperature;
 
-  OpenChatTeamRequest(
-      {required this.model, required this.messages, required this.temperature});
+  OpenChatTeamRequest({
+    required this.model,
+    required this.messages,
+    required this.temperature,
+  });
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = <String, dynamic>{};

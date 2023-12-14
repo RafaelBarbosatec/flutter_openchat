@@ -1,40 +1,37 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter_openchat/src/data/openchat_team/model/openchat_team_request.dart';
+import 'package:flutter_openchat/src/data/openchat_cloud/model/openchat_cloud_request.dart';
 import 'package:http/http.dart' as http;
 
-class OpenChatTeamRepository {
+class OpenChatCouldRepository {
   final Uri uri;
-  final double temperature;
-  final ChatModel model;
+  final String token;
   late final http.Client _client;
 
-  OpenChatTeamRepository({
+  OpenChatCouldRepository({
     required this.uri,
-    required this.temperature,
-    required this.model,
+    required this.token,
   }) {
     _client = http.Client();
   }
 
   Future<({Future<String> data, StreamSubscription subscription})> send(
-    List<ChatMessage> messages, {
+    String prompt, {
     Function(String data)? onListen,
   }) async {
     Completer<String> completer = Completer();
     final List<int> bytes = [];
     final request = http.Request('POST', uri);
-    request.body = OpenChatTeamRequest(
-      messages: messages,
-      model: model,
-      temperature: temperature,
-    ).toJson();
     request.headers.addAll(
       {
+        'X-Bot-Token': token,
         'Content-Type': 'application/json',
       },
     );
+    request.body = OpenChatCloudRequest(
+      content: prompt,
+    ).toJson();
     final response = await _client.send(request);
     if (response.statusCode != 200) {
       throw Exception('Is not possible get a response');

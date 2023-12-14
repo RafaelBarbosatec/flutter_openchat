@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 class OpenchatInputWidget extends StatefulWidget {
   final ValueChanged<String> submit;
   final bool enabled;
-  const OpenchatInputWidget(
-      {super.key, required this.submit, required this.enabled});
+  const OpenchatInputWidget({
+    super.key,
+    required this.submit,
+    required this.enabled,
+  });
 
   @override
   State<OpenchatInputWidget> createState() => _OpenchatInputWidgetState();
@@ -28,9 +31,6 @@ class _OpenchatInputWidgetState extends State<OpenchatInputWidget> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(
-        color: Colors.blue,
-      ),
       child: Row(
         children: [
           Expanded(
@@ -38,18 +38,37 @@ class _OpenchatInputWidgetState extends State<OpenchatInputWidget> {
               controller: _controller,
               textInputAction: TextInputAction.send,
               onFieldSubmitted: _subimit,
-              decoration: const InputDecoration(
-                fillColor: Colors.white,
+              enabled: widget.enabled,
+              decoration: InputDecoration(
+                fillColor: widget.enabled
+                    ? Theme.of(context).colorScheme.background
+                    : null,
                 filled: true,
+                isDense: true,
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 16,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
               ),
             ),
           ),
           const SizedBox(
-            width: 8,
+            width: 16,
           ),
           ElevatedButton(
             onPressed: widget.enabled ? () => _subimit(_controller.text) : null,
-            child: const Text('Enviar'),
+            style: ButtonStyle(
+              shape: MaterialStatePropertyAll(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              padding: const MaterialStatePropertyAll(EdgeInsets.all(11)),
+            ),
+            child: const Icon(Icons.send),
           )
         ],
       ),

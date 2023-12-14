@@ -2,19 +2,23 @@ import 'dart:async';
 
 import 'package:flutter_openchat/src/data/openchat_team/openchat_team_repository.dart';
 import 'package:flutter_openchat/src/llm/llm_provider.dart';
+
 export 'package:flutter_openchat/src/data/openchat_team/model/openchat_team_request.dart';
 
 class OpenChatTeamLLMProvider implements LLMChatProvider {
-  static const _url = 'https://openchat.team/api/chat';
+  static const _urlDefault = 'https://openchat.team/api/chat';
+  final String url;
   final double temperature;
   final ChatModel model;
   late final OpenChatTeamRepository _repository;
   StreamSubscription? _sub;
 
-  OpenChatTeamLLMProvider({this.temperature = 0.5, ChatModel? model})
-      : model = model ?? ChatModel.mistralv3Dot2() {
+  OpenChatTeamLLMProvider(
+      {String? url, this.temperature = 0.5, ChatModel? model})
+      : model = model ?? ChatModel.mistralv3Dot2(),
+        url = url ?? _urlDefault {
     _repository = OpenChatTeamRepository(
-      uri: Uri.parse(_url),
+      uri: Uri.parse(this.url),
       model: this.model,
       temperature: temperature,
     );
