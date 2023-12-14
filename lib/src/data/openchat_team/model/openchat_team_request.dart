@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 enum ChateMessageRole { user, assistant }
@@ -58,6 +59,20 @@ class ChatModel {
       name: 'OpenChat Aura',
       maxLength: 24576,
       tokenLimit: 8192,
+    );
+  }
+
+  ChatModel copyWith({
+    String? id,
+    String? name,
+    int? maxLength,
+    int? tokenLimit,
+  }) {
+    return ChatModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      maxLength: maxLength ?? this.maxLength,
+      tokenLimit: tokenLimit ?? this.tokenLimit,
     );
   }
 }

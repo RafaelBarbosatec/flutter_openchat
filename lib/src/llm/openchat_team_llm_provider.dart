@@ -13,9 +13,11 @@ class OpenChatTeamLLMProvider implements LLMChatProvider {
   late final OpenChatTeamRepository _repository;
   StreamSubscription? _sub;
 
-  OpenChatTeamLLMProvider(
-      {String? url, this.temperature = 0.5, ChatModel? model})
-      : model = model ?? ChatModel.mistralv3Dot2(),
+  OpenChatTeamLLMProvider({
+    String? url,
+    this.temperature = 0.5,
+    ChatModel? model,
+  })  : model = model ?? ChatModel.mistralv3Dot2(),
         url = url ?? _urlDefault {
     _repository = OpenChatTeamRepository(
       uri: Uri.parse(this.url),

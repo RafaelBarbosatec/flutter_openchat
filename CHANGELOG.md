@@ -1,3 +1,5 @@
-## 0.0.1
+## 0.0.2
 
-* TODO: Describe initial release.
+* Adds `OpenChatCloudLLMProvider` to use your chatboot builded in `https://openchat.so` by token.
+* Adds `OpenChatTeamLLMProvider` to use open chatboot `https://openchat.team`.
+* First version of `FlutterOpenChatWidget`.
