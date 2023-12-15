@@ -1,9 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter_openchat/flutter_openchat.dart';
+import 'package:flutter_openchat/src/data/openchat_cloud/model/openchat_cloud_response.dart';
 import 'package:flutter_openchat/src/data/openchat_cloud/openchat_could_repository.dart';
 
-class OpenChatCloudLLMProvider extends LLMProvider {
+class OpenChatCloudLLMProvider extends LLMProvider<OpenChatCloudResponse> {
   static const _urlDefault = 'https://cloud.openchat.so/api/chat/send';
   final String url;
   final String token;
@@ -18,7 +19,7 @@ class OpenChatCloudLLMProvider extends LLMProvider {
   }
 
   @override
-  Future<String> prompt(
+  Future<OpenChatCloudResponse> prompt(
     String prompt, {
     void Function(String saying)? onListen,
   }) async {

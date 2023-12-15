@@ -1,12 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_openchat/flutter_openchat.dart';
+import 'package:flutter_openchat/src/chat/flutter_openchat_controller.dart';
 import 'package:flutter_openchat/src/chat/widgets/openchat_input_widget.dart';
 import 'package:flutter_openchat/src/chat/widgets/openchat_msg_widget.dart';
 
 class FlutterOpenChatWidget extends StatefulWidget {
   final LLMProvider llm;
   final OpenChatInputBuilder? inputBuilder;
+  final OpenChatItemMessageBuilder? msgBuilder;
   final EdgeInsetsGeometry? chatPadding;
   final MarkdownConfig? markdownConfig;
   final String? initialPrompt;
@@ -18,6 +20,7 @@ class FlutterOpenChatWidget extends StatefulWidget {
     super.key,
     required this.llm,
     this.inputBuilder,
+    this.msgBuilder,
     this.chatPadding,
     this.markdownConfig,
     this.initialPrompt,
@@ -32,138 +35,102 @@ class FlutterOpenChatWidget extends StatefulWidget {
 }
 
 class _FlutterOpenChatWidgetState extends State<FlutterOpenChatWidget> {
-  OpenChatWidgetState state = OpenChatWidgetState();
-  List<ChatMessage> chat = [];
-  bool isLLMChat = false;
+  static const _defaultPagging = EdgeInsets.only(bottom: 16, top: 16);
   GlobalKey<OpenChatMsgWidgetState>? _lastAssistantMsg;
-
-  LLMChatProvider get llmChatProvider => widget.llm as LLMChatProvider;
-  LLMProvider get llmProvider => widget.llm;
-
   OpenChatInputBuilder get _defaultInputBuilder => (state, submit) {
         return OpenchatInputWidget(
           submit: submit,
           enabled: !state.saying && !state.loading,
+          saying: state.saying,
         );
       };
 
+  late FlutterOpenChatController _controller;
+
   @override
   void initState() {
-    isLLMChat = widget.llm is LLMChatProvider;
+    _controller = FlutterOpenChatController(widget.llm);
     if (widget.initialPrompt != null) {
-      send(initialMsg: ChatMessage.user(widget.initialPrompt!));
+      send(widget.initialPrompt!, addsInChat: false);
     }
     super.initState();
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        widget.background ?? const SizedBox.shrink(),
-        if (chat.isEmpty) widget.backgroundEmpty ?? const SizedBox.shrink(),
-        Column(
+    return ListenableBuilder(
+      listenable: _controller,
+      builder: (context, snapshot) {
+        return Stack(
+          fit: StackFit.expand,
           children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: chat.length,
-                reverse: true,
-                padding: widget.chatPadding ??
-                    const EdgeInsets.only(
-                      bottom: 16,
-                      top: 16,
-                    ),
-                itemBuilder: (context, index) {
-                  final item = chat.reversed.elementAt(index);
-                  return OpenChatMsgWidget(
-                    key: index == 0 ? _lastAssistantMsg : UniqueKey(),
-                    message: item,
-                    markdownConfig: widget.markdownConfig,
-                    assetBootAvatar: widget.assetBootAvatar,
-                    assetUserAvatar: widget.assetUserAvatar,
-                    tryAgain: _tryAgain,
-                  );
-                },
-              ),
+            widget.background ?? const SizedBox.shrink(),
+            if (_controller.chat.isEmpty)
+              widget.backgroundEmpty ?? const SizedBox.shrink(),
+            Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: _controller.chat.length,
+                    reverse: true,
+                    padding: widget.chatPadding ?? _defaultPagging,
+                    itemBuilder: (context, index) {
+                      final item = _controller.chat.reversed.elementAt(index);
+                      return OpenChatMsgWidget(
+                        key: index == 0 ? _lastAssistantMsg : UniqueKey(),
+                        message: item,
+                        markdownConfig: widget.markdownConfig,
+                        assetBootAvatar: widget.assetBootAvatar,
+                        assetUserAvatar: widget.assetUserAvatar,
+                        tryAgain: _onTryAgain,
+                        builder: widget.msgBuilder,
+                      );
+                    },
+                  ),
+                ),
+                widget.inputBuilder?.call(_controller.state, _submit) ??
+                    _defaultInputBuilder(_controller.state, _submit),
+              ],
             ),
-            widget.inputBuilder?.call(state, _submit) ??
-                _defaultInputBuilder(state, _submit),
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 
   void _submit(String value) {
-    if (value.isEmpty) {
-      return;
-    }
-    chat.add(ChatMessage.user(value));
-    send();
+    if (value.isEmpty) return;
+    send(value);
   }
 
-  void send({ChatMessage? initialMsg, bool addsAssistantMsg = true}) {
-    if (isLLMChat) {
-      List<ChatMessage> list = chat;
-      if (initialMsg != null) {
-        list = [initialMsg];
-      }
-      llmChatProvider.chat(list, onListen: _bootSaying).then((value) {
-        setState(() {
-          state = state.copyWith(saying: false);
-          chat[chat.length - 1] = ChatMessage.assistant(value);
-        });
-      }).catchError(_onError);
-    } else {
-      String lastUserMsg = chat
-          .lastWhere((element) => element.role == ChateMessageRole.user)
-          .content;
-      llmProvider
-          .prompt(
-        initialMsg?.content ?? lastUserMsg,
-        onListen: _bootSaying,
-      )
-          .then((value) {
-        setState(() {
-          state = state.copyWith(saying: false);
-          chat[chat.length - 1] = ChatMessage.assistant(value);
-        });
-      }).catchError(_onError);
-    }
-    setState(() {
-      if (addsAssistantMsg) {
-        _lastAssistantMsg = GlobalKey();
-        chat.add(ChatMessage.assistant(''));
-      }
-      state = state.copyWith(loading: true);
-    });
+  void send(String value, {bool addsInChat = true}) {
+    _lastAssistantMsg = GlobalKey();
+    _controller.send(value, _onSaying, _onError, addsInChat: addsInChat);
   }
 
-  _onError(e) {
+  void _onError() {
     _lastAssistantMsg?.currentState?.onError();
-    setState(() {
-      state = state.copyWith(
-        loading: false,
-        saying: false,
-        error: true,
-      );
-    });
   }
 
-  void _bootSaying(String text) {
-    if (state.loading) {
-      setState(() {
-        state = state.copyWith(
-          loading: false,
-          saying: true,
-        );
-      });
-    }
+  void _onSaying(String text) {
     _lastAssistantMsg?.currentState?.updateText(text);
   }
 
-  void _tryAgain() => send(addsAssistantMsg: false);
+  void _onTryAgain() {
+    String text = _controller.lastUserMsg;
+    if (text.isEmpty) {
+      text = widget.initialPrompt ?? '';
+    }
+    if (text.isNotEmpty) {
+      send(text);
+    }
+  }
 }
 
 typedef OpenChatInputBuilder = Widget Function(

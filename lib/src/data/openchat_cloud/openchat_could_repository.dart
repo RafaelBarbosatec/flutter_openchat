@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_openchat/src/data/openchat_cloud/model/openchat_cloud_request.dart';
+import 'package:flutter_openchat/src/data/openchat_cloud/model/openchat_cloud_response.dart';
 import 'package:http/http.dart' as http;
 
 class OpenChatCouldRepository {
@@ -16,11 +17,11 @@ class OpenChatCouldRepository {
     _client = http.Client();
   }
 
-  Future<({Future<String> data, StreamSubscription subscription})> send(
+  Future<({Future<OpenChatCloudResponse> data, StreamSubscription subscription})> send(
     String prompt, {
     Function(String data)? onListen,
   }) async {
-    Completer<String> completer = Completer();
+    Completer<OpenChatCloudResponse> completer = Completer();
     final List<int> bytes = [];
     final request = http.Request('POST', uri);
     request.headers.addAll(
@@ -41,7 +42,7 @@ class OpenChatCouldRepository {
       onListen?.call(utf8.decode(bytes));
     });
     sub.onDone(() {
-      completer.complete(utf8.decode(bytes));
+      completer.complete( OpenChatCloudResponse.fromJson(utf8.decode(bytes)));
     });
     sub.onError((e) {
       completer.completeError(e);
