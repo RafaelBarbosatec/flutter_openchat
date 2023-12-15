@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       body: FlutterOpenChatWidget(
-        llm: OpenChatTeamLLMProvider(),
+        llm: OpenChatTeamLLM(),
         // llm: OpenChatCloudLLMProvider(token: '1RuzS7w5ceGaN6CiK0J7'),
         assetBootAvatar:
             'https://api.dicebear.com/7.x/bottts-neutral/png?seed=Harley&radius=50',

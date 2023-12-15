@@ -17,7 +17,11 @@ class OpenChatCouldRepository {
     _client = http.Client();
   }
 
-  Future<({Future<OpenChatCloudResponse> data, StreamSubscription subscription})> send(
+  Future<
+      ({
+        Future<OpenChatCloudResponse> data,
+        StreamSubscription subscription
+      })> send(
     String prompt, {
     Function(String data)? onListen,
   }) async {
@@ -42,7 +46,7 @@ class OpenChatCouldRepository {
       onListen?.call(utf8.decode(bytes));
     });
     sub.onDone(() {
-      completer.complete( OpenChatCloudResponse.fromJson(utf8.decode(bytes)));
+      completer.complete(OpenChatCloudResponse.fromJson(utf8.decode(bytes)));
     });
     sub.onError((e) {
       completer.completeError(e);

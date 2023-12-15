@@ -6,7 +6,8 @@ import 'package:markdown_widget/widget/markdown.dart';
 class MsgWidgetDefault extends StatelessWidget {
   final OpenChatItemMessageState state;
   final VoidCallback onTryAgain;
-  const MsgWidgetDefault({super.key, required this.state, required this.onTryAgain});
+  const MsgWidgetDefault(
+      {super.key, required this.state, required this.onTryAgain});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class MsgWidgetDefault extends StatelessWidget {
         children: [
           if (!isUser && state.assetBootAvatar != null) ...[
             const SizedBox(width: 8),
-            _buildAvatar(context,state.assetBootAvatar!)
+            _buildAvatar(context, state.assetBootAvatar!)
           ],
           Flexible(
             child: Container(
@@ -44,11 +45,11 @@ class MsgWidgetDefault extends StatelessWidget {
                 ),
               ),
               padding: const EdgeInsets.all(16),
-              child: _buildMsgContent(context,isUser),
+              child: _buildMsgContent(context, isUser),
             ),
           ),
           if (isUser && state.assetUserAvatar != null) ...[
-            _buildAvatar(context,state.assetUserAvatar!),
+            _buildAvatar(context, state.assetUserAvatar!),
             const SizedBox(width: 8),
           ]
         ],
@@ -63,7 +64,7 @@ class MsgWidgetDefault extends StatelessWidget {
     return Image.asset(asset);
   }
 
-  Widget _buildAvatar(BuildContext context,String asset) {
+  Widget _buildAvatar(BuildContext context, String asset) {
     return Container(
       width: 40,
       height: 40,
@@ -124,6 +125,6 @@ class MsgWidgetDefault extends StatelessWidget {
       return _buildLoading();
     }
 
-    return _buildText(context,isUser);
+    return _buildText(context, isUser);
   }
 }

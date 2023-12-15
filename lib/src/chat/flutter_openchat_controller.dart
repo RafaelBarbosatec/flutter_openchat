@@ -7,7 +7,8 @@ class FlutterOpenChatController extends ChangeNotifier {
   bool _isLLMChat = false;
   final LLMProvider llmProvider;
 
-  LLMChatProvider get llmChatProvider => llmProvider as LLMChatProvider;
+  LLMChat get llmChat => llmProvider as LLMChat;
+  LLMPrompt get llmPrompt => llmProvider as LLMPrompt;
 
   String get lastUserMsg => chat.isNotEmpty
       ? chat
@@ -16,7 +17,7 @@ class FlutterOpenChatController extends ChangeNotifier {
       : '';
 
   FlutterOpenChatController(this.llmProvider) {
-    _isLLMChat = llmProvider is LLMChatProvider;
+    _isLLMChat = llmProvider is LLMChat;
   }
 
   void send(
@@ -45,7 +46,7 @@ class FlutterOpenChatController extends ChangeNotifier {
     Function(String text) onSaying,
     Function onError,
   ) {
-    llmChatProvider.chat(chat, onListen: (text) {
+    llmChat.chat(chat, onListen: (text) {
       if (state.loading) {
         safeNotifyListeners(() {
           state = state.copyWith(saying: true, loading: false);
@@ -65,7 +66,7 @@ class FlutterOpenChatController extends ChangeNotifier {
     Function(String text) onSaying,
     Function onError,
   ) {
-    llmProvider.prompt(prompt).then((value) {
+    llmPrompt.prompt(prompt).then((value) {
       safeNotifyListeners(() {
         String text = value.toString();
         state = state.copyWith(saying: false, loading: false);

@@ -5,7 +5,7 @@ import 'package:flutter_openchat/src/llm/llm_provider.dart';
 
 export 'package:flutter_openchat/src/data/openchat_team/model/openchat_team_request.dart';
 
-class OpenChatTeamLLMProvider implements LLMChatProvider {
+class OpenChatTeamLLM implements LLMChat {
   static const _urlDefault = 'https://openchat.team/api/chat';
   final String url;
   final double temperature;
@@ -13,7 +13,7 @@ class OpenChatTeamLLMProvider implements LLMChatProvider {
   late final OpenChatTeamRepository _repository;
   StreamSubscription? _sub;
 
-  OpenChatTeamLLMProvider({
+  OpenChatTeamLLM({
     String? url,
     this.temperature = 0.5,
     ChatModel? model,
