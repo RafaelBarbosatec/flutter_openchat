@@ -19,6 +19,9 @@ class FlutterOpenChatController extends ChangeNotifier {
           .content
       : '';
 
+  Iterable<ChatMessage> get chatWithoutEmptyContent =>
+      chat.where((e) => e.content.isNotEmpty);
+
   FlutterOpenChatController(this.llmProvider) {
     _isLLMChat = llmProvider is LLMChat;
   }
@@ -42,7 +45,7 @@ class FlutterOpenChatController extends ChangeNotifier {
       _sendChat(
         [
           if (intialPrompt.isNotEmpty) ChatMessage.user(intialPrompt),
-          ...chat,
+          ...chatWithoutEmptyContent,
         ],
         onSaying,
         onError,
@@ -57,7 +60,7 @@ class FlutterOpenChatController extends ChangeNotifier {
       _sendChat(
         [
           if (intialPrompt.isNotEmpty) ChatMessage.user(intialPrompt),
-          ...chat,
+          ...chatWithoutEmptyContent,
         ],
         onSaying,
         onError,
