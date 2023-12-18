@@ -1,3 +1,8 @@
+## 0.0.4
+
+* Updade README.
+* Fix `try again`
+
 ## 0.0.3
 
 * Updade README.

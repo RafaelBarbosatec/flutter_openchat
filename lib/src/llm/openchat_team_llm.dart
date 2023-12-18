@@ -11,12 +11,14 @@ class OpenChatTeamLLM implements LLMChat {
   final String url;
   final double temperature;
   final ChatModel model;
+  final Map<String, String>? header;
   late final OpenChatTeamRepository _repository;
   StreamSubscription? _sub;
 
   OpenChatTeamLLM({
     String? url,
     this.temperature = 0.5,
+    this.header,
     ChatModel? model,
   })  : model = model ?? ChatModel.mistralv3Dot2(),
         url = url ?? _urlDefault {
@@ -25,6 +27,7 @@ class OpenChatTeamLLM implements LLMChat {
       model: this.model,
       temperature: temperature,
       client: http.Client(),
+      header: header,
     );
   }
 

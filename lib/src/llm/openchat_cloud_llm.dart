@@ -9,14 +9,17 @@ class OpenChatCloudLLM extends LLMPrompt<OpenChatCloudResponse> {
   static const _urlDefault = 'https://cloud.openchat.so/api/chat/send';
   final String url;
   final String token;
+  final Map<String, String>? header;
   StreamSubscription? _sub;
   late final OpenChatCouldRepository _repository;
-  OpenChatCloudLLM({required this.token, String? url})
+  
+  OpenChatCloudLLM({required this.token, String? url,this.header})
       : url = url ?? _urlDefault {
     _repository = OpenChatCouldRepository(
       uri: Uri.parse(this.url),
       token: token,
       client: http.Client(),
+      header:header,
     );
   }
 

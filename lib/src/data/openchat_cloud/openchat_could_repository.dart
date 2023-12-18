@@ -9,11 +9,13 @@ class OpenChatCouldRepository {
   final Uri uri;
   final String token;
   final http.Client client;
+  final Map<String, String>? header;
 
   OpenChatCouldRepository({
     required this.uri,
     required this.token,
     required this.client,
+    this.header,
   });
 
   Future<
@@ -31,6 +33,7 @@ class OpenChatCouldRepository {
       {
         'X-Bot-Token': token,
         'Content-Type': 'application/json',
+        ...(header ?? {}),
       },
     );
     request.body = OpenChatCloudRequest(

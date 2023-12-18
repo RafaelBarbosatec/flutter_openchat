@@ -131,13 +131,10 @@ class _FlutterOpenChatWidgetState extends State<FlutterOpenChatWidget> {
   }
 
   void _onTryAgain() {
-    String text = _controller.lastUserMsg;
-    if (text.isEmpty) {
-      text = widget.initialPrompt ?? '';
-    }
-    if (text.isNotEmpty) {
-      send(text);
-    }
+    _controller.tryAgain(
+      _onSaying,
+      _onError,
+    );
   }
 }
 

@@ -52,6 +52,25 @@ class FlutterOpenChatController extends ChangeNotifier {
     }
   }
 
+  void tryAgain(Function(String text) onSaying, Function onError) {
+    if (_isLLMChat) {
+      _sendChat(
+        [
+          if (intialPrompt.isNotEmpty) ChatMessage.user(intialPrompt),
+          ...chat,
+        ],
+        onSaying,
+        onError,
+      );
+    } else {
+      _sendPrompt(
+        chat.isEmpty ? intialPrompt : lastUserMsg,
+        onSaying,
+        onError,
+      );
+    }
+  }
+
   void _sendChat(
     List<ChatMessage> chat,
     Function(String text) onSaying,

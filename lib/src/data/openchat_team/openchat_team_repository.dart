@@ -9,12 +9,14 @@ class OpenChatTeamRepository {
   final double temperature;
   final ChatModel model;
   final http.Client client;
+  final Map<String, String>? header;
 
   OpenChatTeamRepository({
     required this.uri,
     required this.temperature,
     required this.model,
     required this.client,
+    this.header,
   });
 
   Future<({Future<String> data, StreamSubscription subscription})> send(
@@ -32,6 +34,7 @@ class OpenChatTeamRepository {
     request.headers.addAll(
       {
         'Content-Type': 'application/json',
+        ...(header ?? {}),
       },
     );
     final response = await client.send(request);
