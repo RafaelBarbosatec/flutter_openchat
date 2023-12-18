@@ -29,15 +29,14 @@ class FlutterOpenChatController extends ChangeNotifier {
   }) {
     if (isInitialPrompt) {
       intialPrompt = text;
-    }else{
+    } else {
       chat.add(ChatMessage.user(text));
     }
 
     if (_isLLMChat) {
       _sendChat(
         [
-          if(intialPrompt.isNotEmpty)
-           ChatMessage.user(intialPrompt),
+          if (intialPrompt.isNotEmpty) ChatMessage.user(intialPrompt),
           ...chat,
         ],
         onSaying,

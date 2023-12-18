@@ -16,6 +16,7 @@ class FlutterOpenChatWidget extends StatefulWidget {
   final String? assetBotAvatar;
   final Widget? background;
   final Widget? backgroundEmpty;
+  final ValueChanged<OpenChatWidgetState>? onChangeState;
   const FlutterOpenChatWidget({
     super.key,
     required this.llm,
@@ -28,6 +29,7 @@ class FlutterOpenChatWidget extends StatefulWidget {
     this.assetBotAvatar,
     this.background,
     this.backgroundEmpty,
+    this.onChangeState,
   });
 
   @override
@@ -67,6 +69,7 @@ class _FlutterOpenChatWidgetState extends State<FlutterOpenChatWidget> {
     return ListenableBuilder(
       listenable: _controller,
       builder: (context, snapshot) {
+        widget.onChangeState?.call(_controller.state);
         return Stack(
           fit: StackFit.expand,
           children: [
@@ -111,7 +114,8 @@ class _FlutterOpenChatWidgetState extends State<FlutterOpenChatWidget> {
 
   void send(String value, {bool isInitialPrompt = false}) {
     _lastAssistantMsg = GlobalKey();
-    _controller.send(value, _onSaying, _onError, isInitialPrompt: isInitialPrompt);
+    _controller.send(value, _onSaying, _onError,
+        isInitialPrompt: isInitialPrompt);
   }
 
   void _onError() {

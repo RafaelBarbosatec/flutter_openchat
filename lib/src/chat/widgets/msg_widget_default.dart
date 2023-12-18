@@ -38,7 +38,7 @@ class MsgWidgetDefault extends StatelessWidget {
                 color: isUser
                     ? Theme.of(context).colorScheme.primary
                     : state.error
-                        ? Theme.of(context).colorScheme.error
+                        ? Theme.of(context).colorScheme.error.withOpacity(0.5)
                         : Theme.of(context).colorScheme.surfaceVariant,
                 borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(20),

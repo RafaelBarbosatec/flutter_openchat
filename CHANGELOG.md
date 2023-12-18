@@ -2,6 +2,7 @@
 
 * Updade README.
 * Fix `initialPrompt`
+* Adds `onChangeState`
 
 
 ## 0.0.2
