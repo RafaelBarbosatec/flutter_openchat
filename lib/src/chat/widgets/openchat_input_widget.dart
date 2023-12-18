@@ -41,27 +41,22 @@ class _OpenchatInputWidgetState extends State<OpenchatInputWidget> {
       child: Row(
         children: [
           Expanded(
-            child: SizedBox(
-              height: buttonSize,
-              child: TextFormField(
-                key: OpenchatInputWidget.INPUT_KEY,
-                controller: _controller,
-                textInputAction: TextInputAction.send,
-                onFieldSubmitted: _subimit,
-                enabled: widget.enabled,
-                decoration: InputDecoration(
-                  fillColor: widget.enabled
-                      ? Theme.of(context).colorScheme.background
-                      : null,
-                  filled: true,
-                  isDense: true,
-                  contentPadding: const EdgeInsets.symmetric(
-                    vertical: buttonSize / 4,
-                    horizontal: 16,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(buttonSize / 2),
-                  ),
+            child: TextFormField(
+              key: OpenchatInputWidget.INPUT_KEY,
+              controller: _controller,
+              textInputAction: TextInputAction.send,
+              onFieldSubmitted: _subimit,
+              enabled: widget.enabled,
+              decoration: InputDecoration(
+                fillColor: widget.enabled
+                    ? Theme.of(context).colorScheme.background
+                    : null,
+                filled: true,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(buttonSize / 2),
                 ),
               ),
             ),
@@ -75,12 +70,13 @@ class _OpenchatInputWidgetState extends State<OpenchatInputWidget> {
               onPressed:
                   widget.enabled ? () => _subimit(_controller.text) : null,
               style: ButtonStyle(
-                  shape: MaterialStatePropertyAll(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                shape: MaterialStatePropertyAll(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  padding: const MaterialStatePropertyAll(EdgeInsets.zero)),
+                ),
+                padding: const MaterialStatePropertyAll(EdgeInsets.zero),
+              ),
               child: widget.saying
                   ? const Padding(
                       padding: EdgeInsets.all(16),

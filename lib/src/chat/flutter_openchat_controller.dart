@@ -34,6 +34,9 @@ class FlutterOpenChatController extends ChangeNotifier {
     } else {
       chat.add(ChatMessage.user(text));
     }
+    chat.add(ChatMessage.assistant(''));
+    state = state.copyWith(loading: true);
+    safeNotifyListeners();
 
     if (_isLLMChat) {
       _sendChat(
@@ -47,10 +50,6 @@ class FlutterOpenChatController extends ChangeNotifier {
     } else {
       _sendPrompt(isInitialPrompt ? text : lastUserMsg, onSaying, onError);
     }
-    safeNotifyListeners(() {
-      chat.add(ChatMessage.assistant(''));
-      state = state.copyWith(loading: true);
-    });
   }
 
   void _sendChat(
@@ -60,20 +59,18 @@ class FlutterOpenChatController extends ChangeNotifier {
   ) {
     llmChat.chat(chat, onListen: (text) {
       if (state.loading) {
-        safeNotifyListeners(() {
-          state = state.copyWith(saying: true, loading: false);
-        });
+        state = state.copyWith(saying: true, loading: false);
+        safeNotifyListeners();
       }
       onSaying(text);
     }).then((value) {
-      safeNotifyListeners(() {
-        state = state.copyWith(saying: false);
-        if (this.chat.isNotEmpty) {
-          this.chat[this.chat.length - 1] = ChatMessage.assistant(value);
-        } else {
-          this.chat.add(ChatMessage.assistant(value));
-        }
-      });
+      state = state.copyWith(saying: false);
+      if (this.chat.isNotEmpty) {
+        this.chat[this.chat.length - 1] = ChatMessage.assistant(value);
+      } else {
+        this.chat.add(ChatMessage.assistant(value));
+      }
+      safeNotifyListeners();
     }).catchError((_) {
       if (kDebugMode) {
         print('$llmChat (catchError): $_');
@@ -88,12 +85,11 @@ class FlutterOpenChatController extends ChangeNotifier {
     Function onError,
   ) {
     llmPrompt.prompt(prompt).then((value) {
-      safeNotifyListeners(() {
-        String text = value.toString();
-        state = state.copyWith(saying: false, loading: false);
-        onSaying(text);
-        chat[chat.length - 1] = ChatMessage.assistant(text);
-      });
+      String text = value.toString();
+      state = state.copyWith(saying: false, loading: false);
+      onSaying(text);
+      chat[chat.length - 1] = ChatMessage.assistant(text);
+      safeNotifyListeners();
     }).catchError((_) {
       if (kDebugMode) {
         print('$llmPrompt (catchError): $_');
@@ -103,18 +99,16 @@ class FlutterOpenChatController extends ChangeNotifier {
   }
 
   _onError(Function onError) {
-    safeNotifyListeners(() {
-      state = state.copyWith(
-        loading: false,
-        saying: false,
-        error: true,
-      );
-      onError();
-    });
+    state = state.copyWith(
+      loading: false,
+      saying: false,
+      error: true,
+    );
+    onError();
+    safeNotifyListeners();
   }
 
-  void safeNotifyListeners(void Function() call) {
-    call();
+  void safeNotifyListeners() {
     Future.delayed(Duration.zero, notifyListeners);
   }
 }

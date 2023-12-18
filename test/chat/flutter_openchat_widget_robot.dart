@@ -14,11 +14,14 @@ class FlutterOpenChatWidgetRobot extends Robot {
     _llm = LLMPromptMock();
   }
 
-  Future configure() {
+  Future configure({String? initialPrompt}) {
     _confMock();
     return widgetSetup(
       Scaffold(
-        body: FlutterOpenChatWidget(llm: _llm),
+        body: FlutterOpenChatWidget(
+          llm: _llm,
+          initialPrompt: initialPrompt,
+        ),
       ),
     );
   }
@@ -46,6 +49,8 @@ class FlutterOpenChatWidgetRobot extends Robot {
 
   Future assetFlutterOpenChatWidgetEmpty() =>
       takeSnapshot('FlutterOpenChatWidget_empty');
+      Future assetFlutterOpenChatWidgetWithInitialPrompt() =>
+      takeSnapshot('FlutterOpenChatWidget_with_initialprompt');
   Future assetFlutterOpenChatWidgetWithMsg() =>
       takeSnapshot('FlutterOpenChatWidget_with_msg');
 }

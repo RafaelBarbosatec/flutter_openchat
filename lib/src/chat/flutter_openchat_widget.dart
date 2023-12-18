@@ -114,8 +114,12 @@ class _FlutterOpenChatWidgetState extends State<FlutterOpenChatWidget> {
 
   void send(String value, {bool isInitialPrompt = false}) {
     _lastAssistantMsg = GlobalKey();
-    _controller.send(value, _onSaying, _onError,
-        isInitialPrompt: isInitialPrompt);
+    _controller.send(
+      value,
+      _onSaying,
+      _onError,
+      isInitialPrompt: isInitialPrompt,
+    );
   }
 
   void _onError() {
