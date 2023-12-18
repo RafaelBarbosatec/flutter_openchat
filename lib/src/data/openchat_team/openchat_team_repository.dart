@@ -8,15 +8,14 @@ class OpenChatTeamRepository {
   final Uri uri;
   final double temperature;
   final ChatModel model;
-  late final http.Client _client;
+  final http.Client client;
 
   OpenChatTeamRepository({
     required this.uri,
     required this.temperature,
     required this.model,
-  }) {
-    _client = http.Client();
-  }
+    required this.client,
+  });
 
   Future<({Future<String> data, StreamSubscription subscription})> send(
     List<ChatMessage> messages, {
@@ -35,7 +34,7 @@ class OpenChatTeamRepository {
         'Content-Type': 'application/json',
       },
     );
-    final response = await _client.send(request);
+    final response = await client.send(request);
     if (response.statusCode != 200) {
       throw Exception('Is not possible get a response');
     }

@@ -21,6 +21,15 @@ class OpenChatCloudResponse {
 
   @override
   String toString() => response.text;
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'type': type,
+      'response': response.toMap(),
+    };
+  }
+
+  String toJson() => json.encode(toMap());
 }
 
 class OpenChatCloudResponseResponse {
@@ -37,4 +46,12 @@ class OpenChatCloudResponseResponse {
   factory OpenChatCloudResponseResponse.fromJson(String source) =>
       OpenChatCloudResponseResponse.fromMap(
           json.decode(source) as Map<String, dynamic>);
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'text': text,
+    };
+  }
+
+  String toJson() => json.encode(toMap());
 }

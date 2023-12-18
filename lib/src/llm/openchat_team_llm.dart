@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_openchat/src/data/openchat_team/openchat_team_repository.dart';
 import 'package:flutter_openchat/src/llm/llm_provider.dart';
+import 'package:http/http.dart' as http;
 
 export 'package:flutter_openchat/src/data/openchat_team/model/openchat_team_request.dart';
 
@@ -23,6 +24,7 @@ class OpenChatTeamLLM implements LLMChat {
       uri: Uri.parse(this.url),
       model: this.model,
       temperature: temperature,
+      client: http.Client(),
     );
   }
 

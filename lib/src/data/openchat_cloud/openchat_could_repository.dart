@@ -8,14 +8,13 @@ import 'package:http/http.dart' as http;
 class OpenChatCouldRepository {
   final Uri uri;
   final String token;
-  late final http.Client _client;
+  final http.Client client;
 
   OpenChatCouldRepository({
     required this.uri,
     required this.token,
-  }) {
-    _client = http.Client();
-  }
+    required this.client,
+  });
 
   Future<
       ({
@@ -37,7 +36,7 @@ class OpenChatCouldRepository {
     request.body = OpenChatCloudRequest(
       content: prompt,
     ).toJson();
-    final response = await _client.send(request);
+    final response = await client.send(request);
     if (response.statusCode != 200) {
       throw Exception('Is not possible get a response');
     }

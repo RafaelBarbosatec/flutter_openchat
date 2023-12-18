@@ -1,6 +1,10 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
 
 class OpenchatInputWidget extends StatefulWidget {
+  static const INPUT_KEY = Key('INPUT_KEY');
+  static const INPUT_BUTTON_KEY = Key('INPUT_BUTTON_KEY');
   final ValueChanged<String> submit;
   final bool enabled;
   final bool saying;
@@ -40,6 +44,7 @@ class _OpenchatInputWidgetState extends State<OpenchatInputWidget> {
             child: SizedBox(
               height: buttonSize,
               child: TextFormField(
+                key: OpenchatInputWidget.INPUT_KEY,
                 controller: _controller,
                 textInputAction: TextInputAction.send,
                 onFieldSubmitted: _subimit,
@@ -66,6 +71,7 @@ class _OpenchatInputWidgetState extends State<OpenchatInputWidget> {
             width: buttonSize,
             height: buttonSize,
             child: ElevatedButton(
+              key: OpenchatInputWidget.INPUT_BUTTON_KEY,
               onPressed:
                   widget.enabled ? () => _subimit(_controller.text) : null,
               style: ButtonStyle(
