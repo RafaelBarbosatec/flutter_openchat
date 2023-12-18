@@ -48,7 +48,7 @@ This token is available in this section:
 
 ### Customization
 
-This chat is entery customizable take a look some params to do it:
+This chat is entirely customizable take a look some params to do it:
 
 ```dart
 
