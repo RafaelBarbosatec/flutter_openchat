@@ -1,6 +1,7 @@
-## NEXT
+## 0.0.3
 
 * Updade README.
+* Fix `initialPrompt`
 
 
 ## 0.0.2
