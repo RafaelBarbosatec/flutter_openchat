@@ -51,7 +51,7 @@ class _FlutterOpenChatWidgetState extends State<FlutterOpenChatWidget> {
   void initState() {
     _controller = FlutterOpenChatController(widget.llm);
     if (widget.initialPrompt != null) {
-      send(widget.initialPrompt!, addsInChat: false);
+      send(widget.initialPrompt!, isInitialPrompt: true);
     }
     super.initState();
   }
@@ -109,9 +109,9 @@ class _FlutterOpenChatWidgetState extends State<FlutterOpenChatWidget> {
     send(value);
   }
 
-  void send(String value, {bool addsInChat = true}) {
+  void send(String value, {bool isInitialPrompt = false}) {
     _lastAssistantMsg = GlobalKey();
-    _controller.send(value, _onSaying, _onError, addsInChat: addsInChat);
+    _controller.send(value, _onSaying, _onError, isInitialPrompt: isInitialPrompt);
   }
 
   void _onError() {

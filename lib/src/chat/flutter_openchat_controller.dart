@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_openchat/flutter_openchat.dart';
 
 class FlutterOpenChatController extends ChangeNotifier {
@@ -6,6 +6,7 @@ class FlutterOpenChatController extends ChangeNotifier {
   List<ChatMessage> chat = [];
   bool _isLLMChat = false;
   final LLMProvider llmProvider;
+  String intialPrompt = '';
 
   LLMChat get llmChat => llmProvider as LLMChat;
   LLMPrompt get llmPrompt => llmProvider as LLMPrompt;
@@ -24,16 +25,26 @@ class FlutterOpenChatController extends ChangeNotifier {
     String text,
     Function(String text) onSaying,
     Function onError, {
-    bool addsInChat = true,
+    bool isInitialPrompt = false,
   }) {
-    if (addsInChat) {
+    if (isInitialPrompt) {
+      intialPrompt = text;
+    }else{
       chat.add(ChatMessage.user(text));
     }
 
     if (_isLLMChat) {
-      _sendChat(chat, onSaying, onError);
+      _sendChat(
+        [
+          if(intialPrompt.isNotEmpty)
+           ChatMessage.user(intialPrompt),
+          ...chat,
+        ],
+        onSaying,
+        onError,
+      );
     } else {
-      _sendPrompt(lastUserMsg, onSaying, onError);
+      _sendPrompt(isInitialPrompt ? text : lastUserMsg, onSaying, onError);
     }
     safeNotifyListeners(() {
       chat.add(ChatMessage.assistant(''));
@@ -56,9 +67,18 @@ class FlutterOpenChatController extends ChangeNotifier {
     }).then((value) {
       safeNotifyListeners(() {
         state = state.copyWith(saying: false);
-        chat[chat.length - 1] = ChatMessage.assistant(value);
+        if (this.chat.isNotEmpty) {
+          this.chat[this.chat.length - 1] = ChatMessage.assistant(value);
+        } else {
+          this.chat.add(ChatMessage.assistant(value));
+        }
       });
-    }).catchError((_) => _onError(onError));
+    }).catchError((_) {
+      if (kDebugMode) {
+        print('$llmChat (catchError): $_');
+      }
+      return _onError(onError);
+    });
   }
 
   void _sendPrompt(
@@ -73,7 +93,12 @@ class FlutterOpenChatController extends ChangeNotifier {
         onSaying(text);
         chat[chat.length - 1] = ChatMessage.assistant(text);
       });
-    }).catchError((_) => _onError(onError));
+    }).catchError((_) {
+      if (kDebugMode) {
+        print('$llmPrompt (catchError): $_');
+      }
+      return _onError(onError);
+    });
   }
 
   _onError(Function onError) {
