@@ -71,7 +71,7 @@ If you need recreate the all input widget with your way just pass the `inputBuil
     FlutterOpenChatWidget(
         llm: OpenChatTeamLLM(),
         inputBuilder: (OpenChatWidgetState state,ValueChanged<String> submit) {
-          return MyWidget(state,submit);
+          return MyInputWidget(state,submit);
         }
       ),
     )
