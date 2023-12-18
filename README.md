@@ -64,7 +64,7 @@ This chat is entirely customizable take a look some params to do it:
 
 ```
 
-If you need recreate the all input widget with your way just pass the `inputBuilder`:
+If you need recreate the input widget with your way just pass the `inputBuilder`:
 
 ```dart
 
@@ -79,7 +79,7 @@ If you need recreate the all input widget with your way just pass the `inputBuil
 ```
 
 
-If you need recreate the all messages widget with your way just pass the `msgBuilder`:
+If you need recreate the messages widget with your way just pass the `msgBuilder`:
 
 ```dart
 
