@@ -1,8 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_openchat/flutter_openchat.dart';
 import 'package:flutter_openchat/src/chat/widgets/msg_widget_default.dart';
-import 'package:flutter_openchat/src/llm/llm_provider.dart';
-import 'package:markdown_widget/config/configs.dart';
 
 class OpenChatMsgWidget extends StatefulWidget {
   final ChatMessage message;
@@ -26,29 +25,25 @@ class OpenChatMsgWidget extends StatefulWidget {
 }
 
 class OpenChatMsgWidgetState extends State<OpenChatMsgWidget> {
-  // String text = '';
-  // bool error = false;
-  // bool get isUser => widget.message.role == ChateMessageRole.user;
-  // bool get isLoading => text.isEmpty && !isUser && !error;
   late OpenChatItemMessageState state;
+
   @override
   void initState() {
     state = OpenChatItemMessageState(
       text: widget.message.content,
       error: false,
       role: widget.message.role,
-      assetBootAvatar: widget.assetBootAvatar,
+      assetBotAvatar: widget.assetBootAvatar,
       assetUserAvatar: widget.assetUserAvatar,
       markdownConfig: widget.markdownConfig,
     );
     super.initState();
   }
 
-  void updateText(String text) {
-    setState(() {
-      state = state.copyWith(text: text);
-    });
-  }
+  Widget _builderDefault(context, state, tryAgain) => MsgWidgetDefault(
+        state: state,
+        onTryAgain: tryAgain,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -63,10 +58,11 @@ class OpenChatMsgWidgetState extends State<OpenChatMsgWidget> {
     });
   }
 
-  Widget _builderDefault(context, state, tryAgain) => MsgWidgetDefault(
-        state: state,
-        onTryAgain: tryAgain,
-      );
+  void updateText(String text) {
+    setState(() {
+      state = state.copyWith(text: text);
+    });
+  }
 
   void onError() {
     setState(() {
@@ -78,13 +74,13 @@ class OpenChatMsgWidgetState extends State<OpenChatMsgWidget> {
 class OpenChatItemMessageState {
   final String text;
   final bool error;
-  final ChateMessageRole role;
+  final ChatMessageRole role;
   final MarkdownConfig? markdownConfig;
   final String? assetUserAvatar;
-  final String? assetBootAvatar;
+  final String? assetBotAvatar;
 
   bool get isLoading =>
-      text.isEmpty && role == ChateMessageRole.assistant && !error;
+      text.isEmpty && role == ChatMessageRole.assistant && !error;
 
   OpenChatItemMessageState({
     required this.text,
@@ -92,13 +88,13 @@ class OpenChatItemMessageState {
     required this.role,
     this.markdownConfig,
     this.assetUserAvatar,
-    this.assetBootAvatar,
+    this.assetBotAvatar,
   });
 
   OpenChatItemMessageState copyWith({
     String? text,
     bool? error,
-    ChateMessageRole? role,
+    ChatMessageRole? role,
     MarkdownConfig? markdownConfig,
     String? assetUserAvatar,
     String? assetBootAvatar,
@@ -109,13 +105,7 @@ class OpenChatItemMessageState {
       role: role ?? this.role,
       markdownConfig: markdownConfig ?? this.markdownConfig,
       assetUserAvatar: assetUserAvatar ?? this.assetUserAvatar,
-      assetBootAvatar: assetBootAvatar ?? this.assetBootAvatar,
+      assetBotAvatar: assetBootAvatar ?? assetBotAvatar,
     );
   }
 }
-
-typedef OpenChatItemMessageBuilder = Widget Function(
-  BuildContext context,
-  OpenChatItemMessageState state,
-  VoidCallback tryAgain,
-);

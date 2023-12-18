@@ -12,7 +12,7 @@ class FlutterOpenChatController extends ChangeNotifier {
 
   String get lastUserMsg => chat.isNotEmpty
       ? chat
-          .lastWhere((element) => element.role == ChateMessageRole.user)
+          .lastWhere((element) => element.role == ChatMessageRole.user)
           .content
       : '';
 

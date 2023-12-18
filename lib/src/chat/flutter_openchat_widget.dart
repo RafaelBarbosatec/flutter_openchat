@@ -13,7 +13,7 @@ class FlutterOpenChatWidget extends StatefulWidget {
   final MarkdownConfig? markdownConfig;
   final String? initialPrompt;
   final String? assetUserAvatar;
-  final String? assetBootAvatar;
+  final String? assetBotAvatar;
   final Widget? background;
   final Widget? backgroundEmpty;
   const FlutterOpenChatWidget({
@@ -25,7 +25,7 @@ class FlutterOpenChatWidget extends StatefulWidget {
     this.markdownConfig,
     this.initialPrompt,
     this.assetUserAvatar,
-    this.assetBootAvatar,
+    this.assetBotAvatar,
     this.background,
     this.backgroundEmpty,
   });
@@ -86,7 +86,7 @@ class _FlutterOpenChatWidgetState extends State<FlutterOpenChatWidget> {
                         key: index == 0 ? _lastAssistantMsg : UniqueKey(),
                         message: item,
                         markdownConfig: widget.markdownConfig,
-                        assetBootAvatar: widget.assetBootAvatar,
+                        assetBootAvatar: widget.assetBotAvatar,
                         assetUserAvatar: widget.assetUserAvatar,
                         tryAgain: _onTryAgain,
                         builder: widget.msgBuilder,
@@ -136,6 +136,12 @@ class _FlutterOpenChatWidgetState extends State<FlutterOpenChatWidget> {
 typedef OpenChatInputBuilder = Widget Function(
   OpenChatWidgetState state,
   ValueChanged<String> submit,
+);
+
+typedef OpenChatItemMessageBuilder = Widget Function(
+  BuildContext context,
+  OpenChatItemMessageState state,
+  VoidCallback tryAgain,
 );
 
 class OpenChatWidgetState {

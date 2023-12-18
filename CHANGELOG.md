@@ -1,3 +1,8 @@
+## NEXT
+
+* Updade README.
+
+
 ## 0.0.2
 
 * Adds `OpenChatCloudLLMProvider` to use your chatboot builded in `https://openchat.so` by token.

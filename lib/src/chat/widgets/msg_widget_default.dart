@@ -6,21 +6,24 @@ import 'package:markdown_widget/widget/markdown.dart';
 class MsgWidgetDefault extends StatelessWidget {
   final OpenChatItemMessageState state;
   final VoidCallback onTryAgain;
-  const MsgWidgetDefault(
-      {super.key, required this.state, required this.onTryAgain});
+  const MsgWidgetDefault({
+    super.key,
+    required this.state,
+    required this.onTryAgain,
+  });
 
   @override
   Widget build(BuildContext context) {
-    bool isUser = state.role == ChateMessageRole.user;
+    bool isUser = state.role == ChatMessageRole.user;
     return Align(
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          if (!isUser && state.assetBootAvatar != null) ...[
+          if (!isUser && state.assetBotAvatar != null) ...[
             const SizedBox(width: 8),
-            _buildAvatar(context, state.assetBootAvatar!)
+            _buildAvatar(context, state.assetBotAvatar!)
           ],
           Flexible(
             child: Container(
@@ -69,7 +72,6 @@ class MsgWidgetDefault extends StatelessWidget {
       width: 40,
       height: 40,
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary,
         borderRadius: BorderRadius.circular(50),
       ),
       child: ClipRRect(

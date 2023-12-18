@@ -1,24 +1,24 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-enum ChateMessageRole { user, assistant }
+enum ChatMessageRole { user, assistant }
 
 class ChatMessage {
-  ChateMessageRole role;
+  ChatMessageRole role;
   String content;
 
   ChatMessage({required this.role, required this.content});
 
   factory ChatMessage.user(String content) {
     return ChatMessage(
-      role: ChateMessageRole.user,
+      role: ChatMessageRole.user,
       content: content,
     );
   }
 
   factory ChatMessage.assistant(String content) {
     return ChatMessage(
-      role: ChateMessageRole.assistant,
+      role: ChatMessageRole.assistant,
       content: content,
     );
   }
