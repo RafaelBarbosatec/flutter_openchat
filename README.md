@@ -22,8 +22,7 @@ To use the chat available in [OpenChatTeam](https://openchat.team/) you just use
 
     FlutterOpenChatWidget(
         llm: OpenChatTeamLLM(),
-      ),
-    )
+    ),
 
 ```
 
@@ -36,8 +35,7 @@ First you need create your chatboot in [OpenChat Login](https://cloud.openchat.s
 
     FlutterOpenChatWidget(
         llm: OpenChatCloudLLM(token:'1RuzS7w5ceGaN6CiK0J7'),
-      ),
-    )
+    ),
 
 ```
 
@@ -59,8 +57,7 @@ This chat is entirely customizable take a look some params to do it:
         background: MyWidget(), // Here you can customize the chat background
         backgroundEmpty: MyWidget(), // Here you can customize the chat background when there is not messages.
         markdownConfig: MarkdownConfig(), // Here you can settings the markdown style od the bot saying.
-      ),
-    )
+    ),
 
 ```
 
@@ -73,8 +70,7 @@ If you need recreate the input widget with your way just pass the `inputBuilder`
         inputBuilder: (OpenChatWidgetState state,ValueChanged<String> submit) {
           return MyInputWidget(state,submit);
         }
-      ),
-    )
+    ),
 
 ```
 
@@ -88,8 +84,7 @@ If you need recreate the messages widget with your way just pass the `msgBuilder
         msgBuilder: (BuildContext context, OpenChatItemMessageState state, VoidCallback tryAgain) {
           return MyMsgWidget(state,tryAgain);
         }
-      ),
-    )
+    ),
 
 ```
 
@@ -102,8 +97,7 @@ Yeah, It have support to it. Just init your widget passing the param `initialPro
     FlutterOpenChatWidget(
         llm: OpenChatTeamLLM(),
         initialPrompt: 'You are an AI software engineer...',
-      ),
-    )
+    ),
 
 ```
 
