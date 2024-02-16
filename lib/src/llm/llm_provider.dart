@@ -1,6 +1,5 @@
 import 'package:flutter_openchat/src/data/openchat_team/model/openchat_team_request.dart';
 
-export 'openchat_cloud_llm.dart';
 export 'openchat_team_llm.dart';
 
 abstract class LLMProvider<T> {

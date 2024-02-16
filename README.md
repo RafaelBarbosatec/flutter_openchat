@@ -4,12 +4,11 @@
 
 ![](https://raw.githubusercontent.com/RafaelBarbosatec/flutter_openchat/main/img/openchat.png)
 
-Flutter package that help integrate your app with open source chat [openchat.so](https://openchat.so)
+Flutter package that help integrate your app with open source chat [openchat](https://openchat.team)
 
 ## Features
 
 * Use [OpenChatTeam](https://openchat.team) in your app
-* Use your chatboot builded in [OpenChat](https://openchat.so/) in your app
 * Use only LLMProviders to generate text in your app.
 
 ## Usage
@@ -25,24 +24,6 @@ To use the chat available in [OpenChatTeam](https://openchat.team/) you just use
     ),
 
 ```
-
-
-### OpenChat Cloud
-
-First you need create your chatboot in [OpenChat Login](https://cloud.openchat.so/login), after that you just use `FlutterOpenChatWidget` passing `OpenChatCloudLLM` in llm param with yout chat token:
-
-```dart
-
-    FlutterOpenChatWidget(
-        llm: OpenChatCloudLLM(token:'1RuzS7w5ceGaN6CiK0J7'),
-    ),
-
-```
-
-This token is available in this section:
-
-![](https://raw.githubusercontent.com/RafaelBarbosatec/flutter_openchat/main/img/openchat_painel.png)
-
 
 ### Customization
 
@@ -102,9 +83,9 @@ Yeah, It have support to it. Just init your widget passing the param `initialPro
 ```
 
 
-### Using oly the llm to build anything
+### Using only the llm to build anything
 
-You can use oly the llm calls to give a response and create anything. To it jus use `OpenChatTeamLLM` or `OpenChatCloudLLM`:
+You can use only the llm calls to give a response and create anything. To it jus use `OpenChatTeamLLM` or `OpenChatCloudLLM`:
 
 ```dart
 
@@ -124,18 +105,6 @@ You can use oly the llm calls to give a response and create anything. To it jus 
          ChatMessage.assistant('bla bla bla'),
          ChatMessage.user('Ok, thank you!'),
     ],onListen:(text){
-        print(text);
-    }).then((value){
-        print(value);
-    })
-
-```
-
-
-```dart
-
-    final llm = OpenChatCloudLLM()
-    llm.prompt('Do you can support me about your product?',onListen:(text){
         print(text);
     }).then((value){
         print(value);

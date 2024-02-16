@@ -1,3 +1,7 @@
+## 0.0.5
+
+* Remove `OpenChatCloudLLM`. OpenChatCloud services is off.
+
 ## 0.0.4
 
 * Updade README.

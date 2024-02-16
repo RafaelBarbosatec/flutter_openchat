@@ -1,6 +1,6 @@
 name: flutter_openchat
 description: Flutter package that help integrate your app with open source chat https://openchat.so
-version: 0.0.4
+version: 0.0.5
 homepage: https://github.com/RafaelBarbosatec/flutter_openchat
 
 environment:
@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  http: ^1.1.0
+  http: 1.2.0
   markdown_widget: ^2.3.2+1
 
 dev_dependencies:
